@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.naman.mvcviewdemo.common.ViewMvcFactory;
+
 import java.util.List;
 
 public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapter.ViewHolder> implements QuestionListItemViewMvc.Listener {
@@ -14,18 +16,20 @@ public class QuestionListAdapter extends RecyclerView.Adapter<QuestionListAdapte
     private Context mContext;
     private List<String> mQuestionList;
     private IOnQuestionClickedListener onQuestionItemClickListener;
+    private ViewMvcFactory viewMvcFactory;
 
-    public QuestionListAdapter(Context context, List<String> mQuestionList, IOnQuestionClickedListener onQuestionItemClick) {
+    public QuestionListAdapter(Context context, List<String> mQuestionList, IOnQuestionClickedListener onQuestionItemClick, ViewMvcFactory viewMvcFactory) {
         mContext = context;
         this.mQuestionList = mQuestionList;
         this.onQuestionItemClickListener = onQuestionItemClick;
+        this.viewMvcFactory = viewMvcFactory;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        QuestionListItemViewMvc mvc = new QuestionListItemsViewMvcImpl(LayoutInflater.from(mContext),parent);
+        QuestionListItemViewMvc mvc = viewMvcFactory.getQuestionListItemViewMvc(parent);
 
         mvc.registerListener(this);
 

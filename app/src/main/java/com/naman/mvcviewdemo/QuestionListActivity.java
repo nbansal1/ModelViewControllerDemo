@@ -1,14 +1,12 @@
 package com.naman.mvcviewdemo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionListActivity extends AppCompatActivity implements QuestionListViewMvcImpl.Listener {
+public class QuestionListActivity extends BaseActivity implements QuestionListViewMvcImpl.Listener {
 
     private List<String> mQuestionList = new ArrayList<>();
     private QuestionListViewMvc mViewMvc;
@@ -18,11 +16,12 @@ public class QuestionListActivity extends AppCompatActivity implements QuestionL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewMvc = new QuestionListViewMvcImpl(LayoutInflater.from(this),null);
+        mViewMvc = getCompositeRoot().getViewMvcFactory().getQuestionListViewMvc(null);
         mViewMvc.registerListener(this);
 
         setContentView(mViewMvc.getViewRoot());
 
+        mQuestionList = getCompositeRoot().getQuestionList();
 
         addQuestionList();
 
@@ -31,11 +30,6 @@ public class QuestionListActivity extends AppCompatActivity implements QuestionL
     }
 
     public void addQuestionList() {
-
-        for(int i= 0; i< 5;i++) {
-            mQuestionList.add("Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
-            mQuestionList.add("Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of");
-        }
 
         mViewMvc.bindQuestion(mQuestionList);
     }
